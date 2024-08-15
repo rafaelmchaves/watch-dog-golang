@@ -10,6 +10,7 @@ import (
 
 type CalledResponse struct {
 	StatusCode int
+	Body       []byte
 }
 
 func GetRequest(baseURL string, params map[string]string) CalledResponse {
@@ -41,5 +42,6 @@ func GetRequest(baseURL string, params map[string]string) CalledResponse {
 
 	return CalledResponse{
 		StatusCode: resp.StatusCode,
+		Body:       body,
 	}
 }

@@ -35,22 +35,23 @@ func handleService(w http.ResponseWriter, r *http.Request) {
 	route := routes[r.URL.Path]
 
 	if r.Method == "GET" {
-		response = routeGet(r, w, route)
+		response = routeGet(r, route)
 	}
 	if r.Method == "POST" {
 		response = routePost(r, route)
 	}
 
 	w.WriteHeader(response.StatusCode)
+	w.Header().Set("Content-Type", "application/json")
+
+	w.Write(response.Body)
 }
 
-func routeGet(r *http.Request, w http.ResponseWriter, route string) rest.CalledResponse {
+func routeGet(r *http.Request, route string) rest.CalledResponse {
 	queries := r.URL.Query()
 	params := make(map[string]string)
 	for key, values := range queries {
-		fmt.Fprintf(w, "Parameter: %s\n", key)
 		for _, value := range values {
-			fmt.Fprintf(w, "  Value: %s\n", value)
 			params[key] = value
 		}
 	}
