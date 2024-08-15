@@ -47,14 +47,17 @@ func handleService(w http.ResponseWriter, r *http.Request) {
 		response = rest.GetRequest(route, params)
 	}
 	if r.Method == "POST" {
-		defer r.Body.Close()
-		body, err := io.ReadAll(r.Body)
-		if err != nil {
-			http.Error(w, "Failed to read request body", http.StatusInternalServerError)
-			return
-		}
-		response = rest.PostRequest(route, body)
+		response = routePost(r, route)
 	}
 
 	w.WriteHeader(response.StatusCode)
+}
+
+func routePost(r *http.Request, route string) rest.CalledResponse {
+	defer r.Body.Close()
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		return rest.CalledResponse{StatusCode: http.StatusInternalServerError}
+	}
+	return rest.PostRequest(route, body)
 }
