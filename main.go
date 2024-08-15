@@ -32,8 +32,18 @@ func handleService(w http.ResponseWriter, r *http.Request) {
 
 	var response rest.CalledResponse
 	route := routes[r.URL.Path]
+
 	if r.Method == "GET" {
-		response = rest.GetRequest(route)
+		queries := r.URL.Query()
+		params := make(map[string]string)
+		for key, values := range queries {
+			fmt.Fprintf(w, "Parameter: %s\n", key)
+			for _, value := range values {
+				fmt.Fprintf(w, "  Value: %s\n", value)
+				params[key] = value
+			}
+		}
+		response = rest.GetRequest(route, params)
 	}
 
 	w.WriteHeader(response.StatusCode)
