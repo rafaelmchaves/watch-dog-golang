@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -21,12 +22,19 @@ func main() {
 func handleService(w http.ResponseWriter, r *http.Request) {
 
 	routes := map[string]string{
-		"/gateway/service1": "http://localhost:8082/users",
-		"/gateway/service2": "http://localhost:8081",
+		"/gateway/service1":            "http://localhost:8082/users",
+		"/gateway/service1/operations": "http://localhost:8082/operations",
+		"/gateway/service2":            "http://localhost:8081",
 	}
 
+	fmt.Println("path:", r.URL.Path)
+	fmt.Println(r.Method)
+
+	var response rest.CalledResponse
 	route := routes[r.URL.Path]
+	if r.Method == "GET" {
+		response = rest.GetRequest(route)
+	}
 
-	rest.GetRequest(route)
-
+	w.WriteHeader(response.StatusCode)
 }

@@ -7,8 +7,13 @@ import (
 	"net/http"
 )
 
-func GetRequest(url string) {
+type CalledResponse struct {
+	StatusCode int
+}
+
+func GetRequest(url string) CalledResponse {
 	fmt.Println("url called", url)
+
 	resp, err := http.Get(url)
 	if err != nil {
 		log.Fatalf("Failed to make GET request: %v", err)
@@ -21,4 +26,8 @@ func GetRequest(url string) {
 	}
 
 	fmt.Println("Response:", string(body))
+
+	return CalledResponse{
+		StatusCode: resp.StatusCode,
+	}
 }
