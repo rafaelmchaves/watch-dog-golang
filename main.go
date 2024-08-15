@@ -3,36 +3,30 @@ package main
 import (
 	"log"
 	"net/http"
-	"net/http/httputil"
-	"net/url"
+
+	"watchdog-go.com/rest"
 )
 
 func main() {
-	// Define the routes and their respective backend services
-	routes := map[string]string{
-		"/service1": "http://localhost:8082/users",
-		"/service2": "http://localhost:8081",
-	}
 
-	// Create a new ServeMux
-	mux := http.NewServeMux()
-
-	// Create a reverse proxy for each route
-	for route, target := range routes {
-		targetURL, err := url.Parse(target)
-		if err != nil {
-			log.Fatalf("Failed to parse URL: %v", err)
-		}
-
-		proxy := httputil.NewSingleHostReverseProxy(targetURL)
-
-		// Create a handler for the route
-		mux.Handle(route, proxy)
-	}
+	http.HandleFunc("/gateway/*", handleService)
 
 	// Start the HTTP server
 	log.Println("Starting server on :8080")
-	if err := http.ListenAndServe(":8080", mux); err != nil {
+	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatalf("Server failed: %v", err)
 	}
+}
+
+func handleService(w http.ResponseWriter, r *http.Request) {
+
+	routes := map[string]string{
+		"/gateway/service1": "http://localhost:8082/users",
+		"/gateway/service2": "http://localhost:8081",
+	}
+
+	route := routes[r.URL.Path]
+
+	rest.GetRequest(route)
+
 }
