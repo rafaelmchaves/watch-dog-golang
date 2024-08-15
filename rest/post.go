@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-func postRequest(url string, jsonData []byte) {
+func PostRequest(url string, jsonData []byte) CalledResponse {
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
 	if err != nil {
 		log.Fatalf("Failed to create request: %v", err)
@@ -28,4 +28,8 @@ func postRequest(url string, jsonData []byte) {
 	}
 
 	fmt.Println("Response:", string(body))
+
+	return CalledResponse{
+		StatusCode: resp.StatusCode,
+	}
 }

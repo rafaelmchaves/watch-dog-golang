@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 
@@ -44,6 +45,15 @@ func handleService(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		response = rest.GetRequest(route, params)
+	}
+	if r.Method == "POST" {
+		defer r.Body.Close()
+		body, err := io.ReadAll(r.Body)
+		if err != nil {
+			http.Error(w, "Failed to read request body", http.StatusInternalServerError)
+			return
+		}
+		response = rest.PostRequest(route, body)
 	}
 
 	w.WriteHeader(response.StatusCode)
