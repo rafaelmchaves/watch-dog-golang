@@ -12,6 +12,7 @@ import (
 func main() {
 
 	http.HandleFunc("/gateway/*", handleService)
+	http.HandleFunc("/login", rest.HandleLogin)
 
 	// Start the HTTP server
 	log.Println("Starting server on :8080")
@@ -23,9 +24,10 @@ func main() {
 func handleService(w http.ResponseWriter, r *http.Request) {
 
 	routes := map[string]string{
-		"/gateway/service1":            "http://localhost:8082/users",
-		"/gateway/service1/operations": "http://localhost:8082/operations",
-		"/gateway/service2":            "http://localhost:8081",
+		"/gateway/service1":                         "http://localhost:8082/users",
+		"/gateway/service1/operations":              "http://localhost:8082/operations",
+		"/gateway/service1/operations/{id}/clients": "http://localhost:8082/operations/{id}/clients",
+		"/gateway/service2":                         "http://localhost:8081",
 	}
 
 	fmt.Println("path:", r.URL.Path)
@@ -33,6 +35,11 @@ func handleService(w http.ResponseWriter, r *http.Request) {
 
 	var response rest.CalledResponse
 	route := routes[r.URL.Path]
+
+	if route == "" {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
 
 	if r.Method == "GET" {
 		response = routeGet(r, route)
