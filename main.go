@@ -6,13 +6,17 @@ import (
 	"log"
 	"net/http"
 
+	"watchdog-go.com/internal/service"
 	"watchdog-go.com/rest"
 )
 
 func main() {
 
+	var loginSvc service.LoginService = newLoginServiceImpl()
+	loginHandler := rest.NewLoginHandler(loginSvc)
+
 	http.HandleFunc("/gateway/*", handleService)
-	http.HandleFunc("/login", rest.HandleLogin)
+	http.HandleFunc("/login", loginHandler.HandleLogin)
 
 	// Start the HTTP server
 	log.Println("Starting server on :8080")
@@ -72,4 +76,8 @@ func routePost(r *http.Request, route string) rest.CalledResponse {
 		return rest.CalledResponse{StatusCode: http.StatusInternalServerError}
 	}
 	return rest.PostRequest(route, body)
+}
+
+func newLoginServiceImpl() *service.LoginServiceImpl {
+	return &service.LoginServiceImpl{}
 }

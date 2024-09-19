@@ -1,12 +1,4 @@
-package internal
-
-type LoginHandler struct {
-	loginService LoginService
-}
-
-func NewLoginHandler(loginService LoginService) *LoginHandler {
-	return &LoginHandler{loginService: loginService}
-}
+package service
 
 type LoginService interface {
 	Login(login string, password string) (string, error)

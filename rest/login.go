@@ -5,15 +5,23 @@ import (
 	"io"
 	"net/http"
 
-	internal "watchdog-go.com/internal"
+	service "watchdog-go.com/internal/service"
 )
+
+type LoginHandler struct {
+	loginService service.LoginService
+}
+
+func NewLoginHandler(loginService service.LoginService) *LoginHandler {
+	return &LoginHandler{loginService: loginService}
+}
 
 type Login struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
-func HandleLogin(w http.ResponseWriter, r *http.Request) {
+func (h *LoginHandler) HandleLogin(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		body, err := io.ReadAll(r.Body)
 		if err != nil {
@@ -29,10 +37,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		var loginSvc internal.LoginService = newLoginServiceImpl()
-		loginHandler := internal.NewLoginHandler(loginSvc)
-
-		jwt, err := loginHandler.Login(login.Email, login.Password)
+		jwt, err := h.loginService.Login(login.Email, login.Password)
 
 		if err != nil {
 			http.Error(w, "Invalid Credentials", http.StatusUnauthorized)
@@ -45,8 +50,4 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
 
-}
-
-func newLoginServiceImpl() *internal.LoginServiceImpl {
-	return &internal.LoginServiceImpl{}
 }
