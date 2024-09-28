@@ -20,8 +20,8 @@ type User struct {
 }
 
 type loginRequest struct {
-	Username string
-	Password string
+	Username string `json:"username"`
+	Password string `json:"password"`
 }
 
 func CheckLogin(username string, password string) *User {
@@ -37,7 +37,7 @@ func CheckLogin(username string, password string) *User {
 		return nil
 	}
 
-	const baseURL = "localhost:8080"
+	const baseURL = "http://localhost:8080"
 	req, err := http.NewRequest("POST", baseURL+"/login", bytes.NewBuffer(jsonRequest))
 	if err != nil {
 		return nil
@@ -58,9 +58,9 @@ func CheckLogin(username string, password string) *User {
 	}
 	var user User
 
-	err = json.Unmarshal(responseBody, user)
+	err = json.Unmarshal(responseBody, &user)
 	if err != nil {
-		log.Fatalf("Failed to unmarshal the response body in the user struct: %v", err)
+		log.Printf("Failed to unmarshal the response body in the user struct: %v", err)
 		return nil
 	}
 

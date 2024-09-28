@@ -19,8 +19,8 @@ func main() {
 	http.HandleFunc("/login", loginHandler.HandleLogin)
 
 	// Start the HTTP server
-	log.Println("Starting server on :8080")
-	if err := http.ListenAndServe(":8080", nil); err != nil {
+	log.Println("Starting server on :8082")
+	if err := http.ListenAndServe(":8082", nil); err != nil {
 		log.Fatalf("Server failed: %v", err)
 	}
 }
