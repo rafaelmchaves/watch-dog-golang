@@ -1,5 +1,11 @@
 package service
 
+import (
+	"log"
+
+	"watchdog-go.com/internal/infrastructure"
+)
+
 type LoginService interface {
 	Login(login string, password string) (string, error)
 }
@@ -7,8 +13,13 @@ type LoginService interface {
 type LoginServiceImpl struct{}
 
 func (loginService *LoginServiceImpl) Login(login string, password string) (string, error) {
-	//TODO call login function
-	//TODO generate token
+	user := infrastructure.CheckLogin(login, password)
 
-	return "", nil
+	token, err := GenerateToken(*user)
+	if err != nil {
+		log.Fatal("Login failed - ", err)
+		return "", err
+	}
+
+	return token, nil
 }
