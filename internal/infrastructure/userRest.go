@@ -64,5 +64,7 @@ func CheckLogin(username string, password string) *User {
 		return nil
 	}
 
+	log.Println("user:", user)
+
 	return &user
 }

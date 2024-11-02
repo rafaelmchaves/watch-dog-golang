@@ -3,6 +3,7 @@ package rest
 import (
 	"encoding/json"
 	"io"
+	"log"
 	"net/http"
 
 	service "watchdog-go.com/internal/service"
@@ -40,6 +41,7 @@ func (h *LoginHandler) HandleLogin(w http.ResponseWriter, r *http.Request) {
 		jwt, err := h.loginService.Login(login.Email, login.Password)
 
 		if err != nil {
+			log.Println("Error to login", err)
 			http.Error(w, "Invalid Credentials", http.StatusUnauthorized)
 		}
 

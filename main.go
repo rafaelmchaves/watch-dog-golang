@@ -15,13 +15,32 @@ func main() {
 	var loginSvc service.LoginService = newLoginServiceImpl()
 	loginHandler := rest.NewLoginHandler(loginSvc)
 
-	http.HandleFunc("/gateway/*", handleService)
-	http.HandleFunc("/login", loginHandler.HandleLogin)
+	http.HandleFunc("/gateway/*", corsMiddleware(handleService))
+	http.HandleFunc("/login", corsMiddleware(loginHandler.HandleLogin))
 
 	// Start the HTTP server
 	log.Println("Starting server on :8082")
 	if err := http.ListenAndServe(":8082", nil); err != nil {
 		log.Fatalf("Server failed: %v", err)
+	}
+}
+
+// corsMiddleware adds CORS headers to each response
+func corsMiddleware(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		// Set CORS headers
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
+		// Handle preflight requests (OPTIONS)
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusNoContent)
+			return
+		}
+
+		// Call the next handler
+		next(w, r)
 	}
 }
 
