@@ -12,7 +12,7 @@ type User struct {
 	Id       string
 	Name     string
 	Email    string
-	UserType string
+	UserType string `json:"type"`
 	Phone    string
 	City     string
 	State    string
