@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package grpc;
+
+option go_package = "/generated"; 
+
+service Contractor {
+    rpc createJobProposal (ProposalRequest) returns (LawyersResponse);
+}
+
+message ProposalRequest {
+    string ContractorId = 1;
+    string JobId = 2;
+    string lawyerId = 3;
+    double value = 4;
+}
+
+message LawyersResponse {
+    string ProposalId = 1;
+}

@@ -5,24 +5,46 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
 
+	"watchdog-go.com/internal/infrastructure/grpc"
 	"watchdog-go.com/internal/service"
 	"watchdog-go.com/rest"
 )
 
 func main() {
 
+	// Initialize gRPC connection
+	grpc.CreateConnectionConfig()
+
+	// Handle graceful shutdown
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+
+	go func() {
+		<-c
+		log.Println("Shutting down gracefully...")
+		if conn := grpc.GetClientConn(); conn != nil {
+			conn.Close()
+		}
+		os.Exit(0)
+	}()
+
 	var loginSvc service.LoginService = newLoginServiceImpl()
 	loginHandler := rest.NewLoginHandler(loginSvc)
 
 	http.HandleFunc("/gateway/*", corsMiddleware(handleService))
 	http.HandleFunc("/login", corsMiddleware(loginHandler.HandleLogin))
+	http.HandleFunc("/proposals", corsMiddleware(rest.HandleJob))
 
 	// Start the HTTP server
 	log.Println("Starting server on :8082")
 	if err := http.ListenAndServe(":8082", nil); err != nil {
 		log.Fatalf("Server failed: %v", err)
 	}
+
 }
 
 // corsMiddleware adds CORS headers to each response

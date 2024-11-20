@@ -51,5 +51,4 @@ func (h *LoginHandler) HandleLogin(w http.ResponseWriter, r *http.Request) {
 	} else {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
-
 }
