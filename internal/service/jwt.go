@@ -12,6 +12,7 @@ func GenerateToken(user infrastructure.User) (string, error) {
 		"email":    user.Email,
 		"id":       user.Id,
 		"name":     user.Name,
+		"phone":    user.Phone,
 		"city":     user.City,
 		"state":    user.State,
 		"fields":   user.Fields,
