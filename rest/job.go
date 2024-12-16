@@ -25,7 +25,7 @@ func HandleJob(w http.ResponseWriter, r *http.Request) {
 
 func makeProposal(w http.ResponseWriter, r *http.Request) {
 
-	log.Print("it's here")
+	log.Printf("it's here")
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		http.Error(w, "Unable to read request body", http.StatusBadRequest)
