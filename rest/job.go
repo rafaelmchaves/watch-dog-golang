@@ -2,11 +2,11 @@ package rest
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 	"strconv"
 
+	"github.com/labstack/gommon/log"
 	infrastructureJob "watchdog-go.com/internal/infrastructure/grpc"
 	pb "watchdog-go.com/internal/infrastructure/grpc/generated"
 )
@@ -25,7 +25,7 @@ func HandleJob(w http.ResponseWriter, r *http.Request) {
 
 func makeProposal(w http.ResponseWriter, r *http.Request) {
 
-	fmt.Println("it's here")
+	log.Print("it's here")
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		http.Error(w, "Unable to read request body", http.StatusBadRequest)

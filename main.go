@@ -16,6 +16,19 @@ import (
 
 func main() {
 
+	// Specify the log file path
+	logFilePath := "watchdog.log"
+
+	// Open the log file in append mode, create it if it doesn't exist
+	logFile, err := os.OpenFile(logFilePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		log.Fatalf("Failed to open log file: %v", err)
+	}
+	defer logFile.Close()
+
+	// Set log output to the file
+	log.SetOutput(logFile)
+
 	// Initialize gRPC connection
 	grpc.CreateConnectionConfig()
 
