@@ -1,0 +1,9 @@
+2025/01/28 07:28:57 gRPC server connected on :50051
+2025/01/28 07:28:57 Starting server on :8082
+2025/01/28 07:29:11 user: {094cf513-e2f1-4f42-bd72-1b4a01346812 Moreira Advogados Associados moreira@gmail.com CONTRACTOR (31)99212-1212 Belo Horizonte Minas Gerais []}
+2025/01/28 07:30:33 user: {6c49ea45-d33a-4181-910a-46e68279f89e Pedro Pereira pedro@gmail.com LAWYER (31)99999-9999 Sete Lagoas Minas Gerais [Direito Penal Trabalhista]}
+2025/01/28 07:30:34 user: {6c49ea45-d33a-4181-910a-46e68279f89e Pedro Pereira pedro@gmail.com LAWYER (31)99999-9999 Sete Lagoas Minas Gerais [Direito Penal Trabalhista]}
+2025/01/28 07:31:31 Received MakeAnOffer response ok
+2025/01/28 07:32:19 user: {094cf513-e2f1-4f42-bd72-1b4a01346812 Moreira Advogados Associados moreira@gmail.com CONTRACTOR (31)99212-1212 Belo Horizonte Minas Gerais []}
+2025/01/28 07:40:05 user: {6c49ea45-d33a-4181-910a-46e68279f89e Pedro Pereira pedro@gmail.com LAWYER (31)99999-9999 Sete Lagoas Minas Gerais [Direito Penal Trabalhista]}
+2025/01/30 07:09:56 Shutting down gracefully...
