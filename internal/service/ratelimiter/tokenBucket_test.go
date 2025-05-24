@@ -35,3 +35,28 @@ func TestTokenBucket_CheckIsAllowed_Refill(t *testing.T) {
 	}
 
 }
+
+func TestTokenBucket_ConcurrentAccess(t *testing.T) {
+	bucket := NewTokenBucket(10, 10, time.Second)
+
+	success := 0
+	done := make(chan bool)
+
+	for i := 0; i < 20; i++ {
+		go func() {
+			if bucket.CheckIsAllowed() {
+				success++
+			}
+			done <- true
+		}()
+	}
+
+	// Wait for all goroutines
+	for range 20 {
+		<-done
+	}
+
+	if success > 10 {
+		t.Errorf("Expected at most 10 allowed requests, got %d", success)
+	}
+}
