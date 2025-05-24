@@ -21,3 +21,17 @@ func TestTokenBucket_CheckIsAllowed_WithinCapacity(t *testing.T) {
 	}
 
 }
+
+func TestTokenBucket_CheckIsAllowed_Refill(t *testing.T) {
+	bucket := NewTokenBucket(2, 1, time.Second)
+
+	bucket.CheckIsAllowed()
+	bucket.CheckIsAllowed()
+
+	time.Sleep(time.Second * 1)
+
+	if !bucket.CheckIsAllowed() {
+		t.Error("Expected token to be refilled and request should be allowed")
+	}
+
+}

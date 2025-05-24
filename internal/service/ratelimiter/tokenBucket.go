@@ -34,7 +34,6 @@ func (bucket *Bucket) CheckIsAllowed() bool {
 	elapsedTime := now.Sub(bucket.lastRefill)
 
 	log.Info("elapsedTime ", elapsedTime)
-	log.Info("refillPeriod ", bucket.refillPeriod)
 	if elapsedTime >= bucket.refillPeriod {
 		bucket.refill(elapsedTime)
 	}
